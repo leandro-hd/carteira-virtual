@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <title>Criar uma conta</title>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Criar uma conta</h5>
+            <form class="form-signin">
+              <div class="form-label-group">
+                <label for="inputName">Nome</label>
+                <input type="text" id="inputName" class="form-control" placeholder="Digite o seu nome..." required autofocus>                
+              </div>
+
+              <br/><br/>
+
+              <div class="form-label-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="Digite o seu email..." required autofocus>                
+              </div>
+
+              <br/><br/>
+
+              <div class="form-label-group">
+                <label for="inputPassword">Senha</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Digite a sua senha..." required>                
+              </div>
+
+              <br/>
+
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" onclick="register()">Cadastrar</button>
+              <hr class="my-4">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function register() {
+      let name = document.getElementById('inputName').value;
+      let email = document.getElementById('inputEmail').value;
+      let password = document.getElementById('inputPassword').value;
+
+      fetch('/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password
+        })
+      }).then((response) => {
+        if (!response.ok) {
+          alert('Erro ao realizar o cadastro!');
+        } else {
+          alert('Cadastro realizado com sucesso!');
+        }
+      })
+    }
+  </script>
+</body>
+</html>

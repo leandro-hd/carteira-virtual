@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <title>Histórico de transações</title>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Histórico de transações</h5>
+            <form class="form-signin">
+              <div class="form-label-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="Digite o seu email..." required autofocus>                
+              </div>
+
+              <br/><br/>
+
+              <div class="form-label-group">
+                <label for="inputSince">A prtir de</label>
+                <input type="date" id="inputSince" class="form-control" required autofocus>                
+              </div>
+
+              <br/><br/>
+
+              <div class="form-label-group">
+                <label for="inputBefore">Antes de</label>
+                <input type="date" id="inputBefore" class="form-control" required autofocus>                
+              </div>
+
+              <br/><br/>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Amigo</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+              </table>
+
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="button" onclick="money()">Search History</button>
+              <hr class="my-4">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function money() {
+      let email = document.getElementById('inputEmail').value;
+      let since = document.getElementById('inputSince').value;
+      let before = document.getElementById('inputBefore').value;
+
+      fetch(`/history/${email}/${since} 00:00:00 +0000/${before} 23:59:59 +0000`).then(function(response) {
+        return response.json();
+      }).then(function(data) {
+        let tbody = document.getElementById('tbody');
+        for (let value in data) {
+          let tr = tbody.appendChild(document.createElement('tr'));
+
+          let id = tr.appendChild(document.createElement('th'));          
+          let valueMoney = tr.appendChild(document.createElement('td'));
+          let category = tr.appendChild(document.createElement('td'));
+          let description = tr.appendChild(document.createElement('td'));
+          let friend = tr.appendChild(document.createElement('td'));
+
+          let formatted_value = String(data[value].value).substring(String(data[value].value).length - 2);
+          let value_formatted = String(data[value].value).replace(formatted_value, `,${formatted_value}`);
+
+          id.innerHTML += data[value].id;
+          valueMoney.innerHTML += value_formatted;
+          category.innerHTML += data[value].category;
+          description.innerHTML += data[value].description;
+          friend.innerHTML += data[value].is_friend;
+        }
+      })
+    }
+  </script>
+</body>
+</html>
